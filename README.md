@@ -38,7 +38,6 @@ In `zswap`, options start with `:`
 
 - `:help=?` : Show an option's help (Here, the option is `?`) (eg : `zswap :help=override`)
 
-## Dependancies
+## Dependencies
 
 You need to have `python` installed to use this script
-

@@ -3,7 +3,7 @@ import sys
 import re  # regex
 
 
-default_options = {'override': False, 'output': True, 'errors': True, 'warnings': True, 'prefix': '#&', 'escape': None,
+default_options = {'override': False, 'output': True, 'errors': True, 'warnings': True, 'prefix': '#&', 'escape': [],
                    'zfile': False, 'zold': False}
 
 id_ignore_override = 0  # used to avoid overriding a file without the possibility to create a .zold file
@@ -13,7 +13,6 @@ options = default_options
 unknown_options = []
 zswap_options_help = []
 zswap_options_description = dict()
-
 
 # :help=?
 zswap_options_description['override'] = '''
@@ -42,7 +41,6 @@ zswap_options_description['prefix'] = '''
 zswap_options_description['escape'] = '''
     Escape a string in included files
 '''
-
 
 zswap_help = '''
 <[ zswap\'s help ]>
@@ -133,7 +131,7 @@ else:
                 if prefix_option:  # :prefix=?
                     options['prefix'] = prefix_option
                 elif escape_option:  # :escape=?
-                    options['escape'] = escape_option
+                    options['escape'].append(escape_option)
                 elif help_option:  # :help=?
                     zswap_options_help.append(help_option)
                 else:
@@ -190,9 +188,14 @@ else:
                             tagged_file_content = tagged_file.read()
                             tagged_file.close()
 
-                            if options['escape']:
-                                tagged_file_content = replace(tagged_file_content, options['escape'],
-                                                              '\\' + options['escape'])
+                            if len(options['escape']) > 0:
+                                for escape_string in options['escape']:
+                                    test_string = tagged_file_content
+                                    tagged_file_content = replace(tagged_file_content, escape_string,
+                                                                  '\\' + escape_string)
+                                    if test_string == tagged_file_content and options['warnings']:
+                                        print('WARNING: "' + i + "\" doesn't contain the string \"" +
+                                              escape_string + '"')
 
                             file_result = replace(file_result, options['prefix'] + 'zswap<' + path + '>',
                                                   tagged_file_content)
