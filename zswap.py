@@ -65,7 +65,7 @@ zswap_help = '''
 
     About :
         Created by frk2z (@FrK2z)
-        Version : 1.0.0
+        Version : 1.0.1
 
 <[ end help ]>
 '''
